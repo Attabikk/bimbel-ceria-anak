@@ -1,16 +1,49 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { subjects, Subject } from "@/data/questions";
+import SubjectCard from "@/components/SubjectCard";
+import QuizView from "@/components/QuizView";
+import { GraduationCap } from "lucide-react";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [activeSubject, setActiveSubject] = useState<Subject | null>(null);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto px-4 py-8">
+        {!activeSubject ? (
+          <div className="flex flex-col gap-8 animate-in fade-in">
+            {/* Header */}
+            <div className="text-center flex flex-col items-center gap-3">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <GraduationCap className="w-8 h-8 text-primary" />
+              </div>
+              <h1 className="text-3xl font-black text-foreground">Bimbel SD</h1>
+              <p className="text-muted-foreground font-medium">
+                Belajar seru untuk anak SD! 🎒
+              </p>
+            </div>
+
+            {/* Subject cards */}
+            <div className="grid gap-4">
+              {subjects.map((subject) => (
+                <SubjectCard
+                  key={subject.id}
+                  subject={subject}
+                  onClick={() => setActiveSubject(subject)}
+                />
+              ))}
+            </div>
+
+            <p className="text-center text-xs text-muted-foreground">
+              Pilih mata pelajaran untuk mulai kuis ✨
+            </p>
+          </div>
+        ) : (
+          <QuizView subject={activeSubject} onBack={() => setActiveSubject(null)} />
+        )}
+      </div>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
