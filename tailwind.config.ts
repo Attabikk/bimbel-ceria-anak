@@ -7,13 +7,24 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
         "2xl": "1400px",
       },
     },
     extend: {
+      fontFamily: {
+        nunito: ['Nunito', 'sans-serif'],
+      },
       colors: {
+        kids: {
+          blue: "hsl(var(--kids-blue))",
+          orange: "hsl(var(--kids-orange))",
+          pink: "hsl(var(--kids-pink))",
+          green: "hsl(var(--kids-green))",
+          purple: "hsl(var(--kids-purple))",
+          yellow: "hsl(var(--kids-yellow))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
