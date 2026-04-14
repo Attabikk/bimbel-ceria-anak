@@ -1,8 +1,15 @@
+export interface MaterialFile {
+  name: string;
+  type: string;
+  data: string; // base64
+}
+
 export interface Material {
   id: string;
   subject: string;
   title: string;
   content: string;
+  files: MaterialFile[];
   createdAt: string;
 }
 
