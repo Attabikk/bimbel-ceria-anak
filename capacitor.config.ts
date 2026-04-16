@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.32072887d9ff4b6e8656fa6d3c09595b',
+  appId: 'app.lovable.bimbelceriaanak',
   appName: 'bimbel-ceria-anak',
   webDir: 'dist',
   server: {
