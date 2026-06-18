@@ -29,9 +29,18 @@ export interface Payment {
   note: string;
 }
 
+export interface Attendance {
+  id: string;
+  studentId: string;
+  date: string;
+  status: "hadir" | "izin" | "sakit" | "alpa";
+  note: string;
+}
+
 const MATERIALS_KEY = "bimbel_materials";
 const STUDENTS_KEY = "bimbel_students";
 const PAYMENTS_KEY = "bimbel_payments";
+const ATTENDANCE_KEY = "bimbel_attendance";
 
 function getItem<T>(key: string): T[] {
   const data = localStorage.getItem(key);
@@ -79,4 +88,17 @@ export const addPayment = (p: Omit<Payment, "id">) => {
 };
 export const deletePayment = (id: string) => {
   setItem(PAYMENTS_KEY, getPayments().filter((p) => p.id !== id));
+};
+
+// Attendance
+export const getAttendance = () => getItem<Attendance>(ATTENDANCE_KEY);
+export const addAttendance = (a: Omit<Attendance, "id">) => {
+  const all = getAttendance();
+  const item: Attendance = { ...a, id: crypto.randomUUID() };
+  all.push(item);
+  setItem(ATTENDANCE_KEY, all);
+  return item;
+};
+export const deleteAttendance = (id: string) => {
+  setItem(ATTENDANCE_KEY, getAttendance().filter((a) => a.id !== id));
 };

@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MaterialsTab from "@/components/MaterialsTab";
 import StudentsTab from "@/components/StudentsTab";
 import PaymentsTab from "@/components/PaymentsTab";
+import AttendanceTab from "@/components/AttendanceTab";
 
 const Index = () => {
   return (
@@ -19,9 +20,10 @@ const Index = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="materials" className="w-full">
-          <TabsList className="w-full grid grid-cols-3">
+          <TabsList className="w-full grid grid-cols-4">
             <TabsTrigger value="materials">📖 Materi</TabsTrigger>
             <TabsTrigger value="students">👨‍🎓 Murid</TabsTrigger>
+            <TabsTrigger value="attendance">📝 Absen</TabsTrigger>
             <TabsTrigger value="payments">💰 Bayar</TabsTrigger>
           </TabsList>
           <TabsContent value="materials">
@@ -29,6 +31,9 @@ const Index = () => {
           </TabsContent>
           <TabsContent value="students">
             <StudentsTab />
+          </TabsContent>
+          <TabsContent value="attendance">
+            <AttendanceTab />
           </TabsContent>
           <TabsContent value="payments">
             <PaymentsTab />
