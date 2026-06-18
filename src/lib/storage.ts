@@ -89,3 +89,16 @@ export const addPayment = (p: Omit<Payment, "id">) => {
 export const deletePayment = (id: string) => {
   setItem(PAYMENTS_KEY, getPayments().filter((p) => p.id !== id));
 };
+
+// Attendance
+export const getAttendance = () => getItem<Attendance>(ATTENDANCE_KEY);
+export const addAttendance = (a: Omit<Attendance, "id">) => {
+  const all = getAttendance();
+  const item: Attendance = { ...a, id: crypto.randomUUID() };
+  all.push(item);
+  setItem(ATTENDANCE_KEY, all);
+  return item;
+};
+export const deleteAttendance = (id: string) => {
+  setItem(ATTENDANCE_KEY, getAttendance().filter((a) => a.id !== id));
+};
