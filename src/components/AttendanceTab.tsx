@@ -26,7 +26,6 @@ const AttendanceTab = () => {
   const [date, setDate] = useState(today());
   const [status, setStatus] = useState<Status>("hadir");
   const [note, setNote] = useState("");
-  const [filterDate, setFilterDate] = useState("");
 
   const handleAdd = () => {
     if (!studentId || !date) {
