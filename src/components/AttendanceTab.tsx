@@ -26,7 +26,6 @@ const AttendanceTab = () => {
   const [date, setDate] = useState(today());
   const [status, setStatus] = useState<Status>("hadir");
   const [note, setNote] = useState("");
-  const [filterDate, setFilterDate] = useState("");
 
   const handleAdd = () => {
     if (!studentId || !date) {
@@ -52,9 +51,7 @@ const AttendanceTab = () => {
   const getStudentName = (id: string) => students.find((s) => s.id === id)?.name || "—";
   const getStatusMeta = (s: string) => STATUS_OPTIONS.find((o) => o.value === s) || STATUS_OPTIONS[0];
 
-  const filtered = [...records]
-    .filter((r) => (filterDate ? r.date === filterDate : true))
-    .sort((a, b) => b.date.localeCompare(a.date));
+  const filtered = [...records].sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <div className="flex flex-col gap-4">
@@ -108,12 +105,8 @@ const AttendanceTab = () => {
         </Card>
       )}
 
-      <div className="flex items-center gap-2">
-        <Input type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} placeholder="Filter tanggal" />
-        {filterDate && (
-          <Button variant="outline" size="sm" onClick={() => setFilterDate("")}>Reset</Button>
-        )}
-      </div>
+
+
 
       {filtered.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">

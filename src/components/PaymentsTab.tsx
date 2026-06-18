@@ -15,15 +15,18 @@ const MONTHS = [
 
 const WEEKS = ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"];
 
+const today = () => new Date().toISOString().slice(0, 10);
+
 const PaymentsTab = () => {
   const [payments, setPayments] = useState<Payment[]>(getPayments());
   const [students] = useState<Student[]>(getStudents());
   const [showForm, setShowForm] = useState(false);
   const [studentId, setStudentId] = useState("");
   const [amount, setAmount] = useState("");
+  const [date, setDate] = useState(today());
   const [month, setMonth] = useState("");
   const [week, setWeek] = useState("");
-  const [paymentType, setPaymentType] = useState<"weekly" | "monthly">("weekly");
+  const [paymentType, setPaymentType] = useState<"daily" | "weekly">("daily");
   const [note, setNote] = useState("");
 
   const handleAdd = () => {
@@ -31,27 +34,28 @@ const PaymentsTab = () => {
       toast.error("Murid dan jumlah harus diisi!");
       return;
     }
+    if (paymentType === "daily" && !date) {
+      toast.error("Tanggal harus dipilih!");
+      return;
+    }
     if (paymentType === "weekly" && (!week || !month)) {
       toast.error("Bulan dan minggu harus dipilih!");
       return;
     }
-    if (paymentType === "monthly" && !month) {
-      toast.error("Bulan harus dipilih!");
-      return;
-    }
 
-    const label = paymentType === "weekly" ? `${month} - ${week}` : month;
+    const label = paymentType === "daily" ? date : `${month} - ${week}`;
 
     addPayment({
       studentId,
       amount: Number(amount),
       month: label,
       date: new Date().toISOString(),
-      note: `[${paymentType === "weekly" ? "Mingguan" : "Bulanan"}] ${note}`.trim(),
+      note: `[${paymentType === "daily" ? "Harian" : "Mingguan"}] ${note}`.trim(),
     });
     setPayments(getPayments());
     setStudentId("");
     setAmount("");
+    setDate(today());
     setMonth("");
     setWeek("");
     setNote("");
@@ -73,8 +77,8 @@ const PaymentsTab = () => {
   const formatCurrency = (n: number) =>
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);
 
+  const dailyPayments = payments.filter((p) => p.note?.startsWith("[Harian]"));
   const weeklyPayments = payments.filter((p) => p.note?.startsWith("[Mingguan]"));
-  const monthlyPayments = payments.filter((p) => p.note?.startsWith("[Bulanan]"));
 
   const renderPaymentList = (list: Payment[]) =>
     list.length === 0 ? (
@@ -96,7 +100,7 @@ const PaymentsTab = () => {
                   </p>
                   {p.note && (
                     <p className="text-xs text-muted-foreground">
-                      {p.note.replace("[Mingguan] ", "").replace("[Bulanan] ", "")}
+                      {p.note.replace("[Harian] ", "").replace("[Mingguan] ", "")}
                     </p>
                   )}
                 </div>
@@ -137,6 +141,14 @@ const PaymentsTab = () => {
 
                 <div className="flex gap-2">
                   <Button
+                    variant={paymentType === "daily" ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setPaymentType("daily")}
+                  >
+                    Harian
+                  </Button>
+                  <Button
                     variant={paymentType === "weekly" ? "default" : "outline"}
                     size="sm"
                     className="flex-1"
@@ -144,34 +156,29 @@ const PaymentsTab = () => {
                   >
                     Mingguan
                   </Button>
-                  <Button
-                    variant={paymentType === "monthly" ? "default" : "outline"}
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => setPaymentType("monthly")}
-                  >
-                    Bulanan
-                  </Button>
                 </div>
 
-                <Select value={month} onValueChange={setMonth}>
-                  <SelectTrigger><SelectValue placeholder="Pilih bulan" /></SelectTrigger>
-                  <SelectContent>
-                    {MONTHS.map((m) => (
-                      <SelectItem key={m} value={m}>{m}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {paymentType === "weekly" && (
-                  <Select value={week} onValueChange={setWeek}>
-                    <SelectTrigger><SelectValue placeholder="Pilih minggu" /></SelectTrigger>
-                    <SelectContent>
-                      {WEEKS.map((w) => (
-                        <SelectItem key={w} value={w}>{w}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                {paymentType === "daily" ? (
+                  <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                ) : (
+                  <>
+                    <Select value={month} onValueChange={setMonth}>
+                      <SelectTrigger><SelectValue placeholder="Pilih bulan" /></SelectTrigger>
+                      <SelectContent>
+                        {MONTHS.map((m) => (
+                          <SelectItem key={m} value={m}>{m}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select value={week} onValueChange={setWeek}>
+                      <SelectTrigger><SelectValue placeholder="Pilih minggu" /></SelectTrigger>
+                      <SelectContent>
+                        {WEEKS.map((w) => (
+                          <SelectItem key={w} value={w}>{w}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </>
                 )}
 
                 <Input type="number" placeholder="Jumlah pembayaran (Rp)" value={amount} onChange={(e) => setAmount(e.target.value)} />
@@ -186,13 +193,13 @@ const PaymentsTab = () => {
         </Card>
       )}
 
-      <Tabs defaultValue="weekly" className="w-full">
+      <Tabs defaultValue="daily" className="w-full">
         <TabsList className="w-full">
+          <TabsTrigger value="daily" className="flex-1">Harian</TabsTrigger>
           <TabsTrigger value="weekly" className="flex-1">Mingguan</TabsTrigger>
-          <TabsTrigger value="monthly" className="flex-1">Bulanan</TabsTrigger>
         </TabsList>
+        <TabsContent value="daily">{renderPaymentList(dailyPayments)}</TabsContent>
         <TabsContent value="weekly">{renderPaymentList(weeklyPayments)}</TabsContent>
-        <TabsContent value="monthly">{renderPaymentList(monthlyPayments)}</TabsContent>
       </Tabs>
     </div>
   );
