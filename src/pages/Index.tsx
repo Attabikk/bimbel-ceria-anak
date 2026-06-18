@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MaterialsTab from "@/components/MaterialsTab";
 import StudentsTab from "@/components/StudentsTab";
 import PaymentsTab from "@/components/PaymentsTab";
+import AttendanceTab from "@/components/AttendanceTab";
 
 const Index = () => {
   return (
