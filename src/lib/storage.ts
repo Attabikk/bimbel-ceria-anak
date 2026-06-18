@@ -29,9 +29,18 @@ export interface Payment {
   note: string;
 }
 
+export interface Attendance {
+  id: string;
+  studentId: string;
+  date: string;
+  status: "hadir" | "izin" | "sakit" | "alpa";
+  note: string;
+}
+
 const MATERIALS_KEY = "bimbel_materials";
 const STUDENTS_KEY = "bimbel_students";
 const PAYMENTS_KEY = "bimbel_payments";
+const ATTENDANCE_KEY = "bimbel_attendance";
 
 function getItem<T>(key: string): T[] {
   const data = localStorage.getItem(key);
