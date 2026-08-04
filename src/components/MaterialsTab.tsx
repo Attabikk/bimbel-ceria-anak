@@ -1,75 +1,12 @@
-import { useState, useRef } from "react";
-import { getMaterials, addMaterial, deleteMaterial, Material, MaterialFile } from "@/lib/storage";
+import { useState } from "react";
+import { getMaterials, deleteMaterial, Material, MaterialFile } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, BookOpen, Paperclip, FileText, Image, X, Download } from "lucide-react";
+import { Trash2, BookOpen, FileText, Image, Download } from "lucide-react";
 import { toast } from "sonner";
-
-const SUBJECTS = ["Matematika", "IPA", "Bahasa Indonesia", "IPS", "PKn", "Bahasa Inggris", "Lainnya"];
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB per file
-const ALLOWED_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp", "image/gif"];
 
 const MaterialsTab = () => {
   const [materials, setMaterials] = useState<Material[]>(getMaterials());
-  const [showForm, setShowForm] = useState(false);
-  const [subject, setSubject] = useState("");
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [files, setFiles] = useState<MaterialFile[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
-    if (!selectedFiles) return;
-
-    Array.from(selectedFiles).forEach((file) => {
-      if (!ALLOWED_TYPES.includes(file.type)) {
-        toast.error(`Format ${file.name} tidak didukung. Gunakan PDF, JPG, PNG, atau WebP.`);
-        return;
-      }
-      if (file.size > MAX_FILE_SIZE) {
-        toast.error(`${file.name} terlalu besar (maks 2MB per file).`);
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFiles((prev) => [
-          ...prev,
-          { name: file.name, type: file.type, data: reader.result as string },
-        ]);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const removeFile = (index: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleAdd = () => {
-    if (!subject || !title || !content) {
-      toast.error("Semua field harus diisi!");
-      return;
-    }
-    try {
-      addMaterial({ subject, title, content, files });
-      setMaterials(getMaterials());
-      setSubject("");
-      setTitle("");
-      setContent("");
-      setFiles([]);
-      setShowForm(false);
-      toast.success("Materi berhasil ditambahkan!");
-    } catch {
-      toast.error("Penyimpanan penuh! Coba hapus beberapa materi atau gunakan file yang lebih kecil.");
-    }
-  };
 
   const handleDelete = (id: string) => {
     deleteMaterial(id);
