@@ -1,6 +1,5 @@
 import { GraduationCap } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MaterialsTab from "@/components/MaterialsTab";
 import StudentsTab from "@/components/StudentsTab";
 import PaymentsTab from "@/components/PaymentsTab";
 import AttendanceTab from "@/components/AttendanceTab";
@@ -19,16 +18,12 @@ const Index = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="materials" className="w-full">
-          <TabsList className="w-full grid grid-cols-4">
-            <TabsTrigger value="materials">📖 Materi</TabsTrigger>
+        <Tabs defaultValue="students" className="w-full">
+          <TabsList className="w-full grid grid-cols-3">
             <TabsTrigger value="students">👨‍🎓 Murid</TabsTrigger>
             <TabsTrigger value="attendance">📝 Absen</TabsTrigger>
             <TabsTrigger value="payments">💰 Bayar</TabsTrigger>
           </TabsList>
-          <TabsContent value="materials">
-            <MaterialsTab />
-          </TabsContent>
           <TabsContent value="students">
             <StudentsTab />
           </TabsContent>
