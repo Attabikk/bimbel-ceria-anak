@@ -32,76 +32,12 @@ const MaterialsTab = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-foreground">Materi Pembelajaran</h2>
-        <Button onClick={() => setShowForm(!showForm)} size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Tambah
-        </Button>
-      </div>
-
-      {showForm && (
-        <Card>
-          <CardContent className="pt-4 flex flex-col gap-3">
-            <Select value={subject} onValueChange={setSubject}>
-              <SelectTrigger><SelectValue placeholder="Pilih mata pelajaran" /></SelectTrigger>
-              <SelectContent>
-                {SUBJECTS.map((s) => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Input placeholder="Judul materi" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <Textarea placeholder="Isi materi..." value={content} onChange={(e) => setContent(e.target.value)} rows={5} />
-
-            {/* File attachment */}
-            <div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.jpg,.jpeg,.png,.webp,.gif"
-                multiple
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Paperclip className="w-4 h-4 mr-1" /> Lampirkan File
-              </Button>
-              <p className="text-xs text-muted-foreground mt-1">
-                PDF, JPG, PNG, WebP (maks 2MB/file)
-              </p>
-            </div>
-
-            {files.length > 0 && (
-              <div className="flex flex-col gap-2">
-                {files.map((file, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-muted rounded-md px-3 py-2 text-sm">
-                    {getFileIcon(file.type)}
-                    <span className="flex-1 truncate">{file.name}</span>
-                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeFile(i)}>
-                      <X className="w-3 h-3" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="flex gap-2">
-              <Button onClick={handleAdd} className="flex-1">Simpan</Button>
-              <Button variant="outline" onClick={() => { setShowForm(false); setFiles([]); }}>Batal</Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <h2 className="text-xl font-bold text-foreground">Materi Pembelajaran</h2>
 
       {materials.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-40" />
-          <p>Belum ada materi. Tambahkan materi pertama!</p>
+          <p>Belum ada materi.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
